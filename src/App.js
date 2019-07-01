@@ -4,6 +4,13 @@ import './App.css';
 import Todo from './components/Todo';
 import NewTodo from './components/NewTodo';
 
+function randomColor(){
+  let color1 = Math.random() * 255;
+  let color2 = Math.random() * 255;
+  let color3 = Math.random() * 255;
+  return `rgb(${color1},${color2},${color3})`;
+}
+
 class App extends Component {
 
   state = {
@@ -11,7 +18,18 @@ class App extends Component {
   };
 
   removeItem = e => {
-    console.log(e.target.parentElement.parentElement.remove());
+
+    let id = e.target.id;
+    let newTodos = this.state.todos.slice(0);
+
+    for (let todo of newTodos){
+      
+      if (todo.id.toString() === id.toString()){
+        newTodos.splice(newTodos.indexOf(todo), 1);
+        break;
+      }
+    }
+    this.setState({todos:newTodos});
   }
 
   newItem = () => {
@@ -26,8 +44,9 @@ class App extends Component {
     return (
       <div className="container">
         <NewTodo action={this.newItem}/>
-        {this.state.todos.map(todo => <Todo key={todo.id} removeItem={this.removeItem}/>)}
-
+        <div className="d-flex mt-4">
+          {this.state.todos.map(todo => <Todo color={randomColor()}key={todo.id} index={todo.id}removeItem={this.removeItem}/>)}
+        </div>
       </div>
     )
   }
